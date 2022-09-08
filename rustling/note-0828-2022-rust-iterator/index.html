@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        
+
+        <title></title>
+
+        
+            <link rel="stylesheet" href="https://cometyang.github.io/theme.css">
+        
+        
+    </head>
+    <body>
+        <div class="content">
+        
+        
+            <header>
+                <div class="header-left">
+                    <a href="https:&#x2F;&#x2F;cometyang.github.io" class="logo"></a>
+                </div>
+                <div class="header-right">
+                    <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+                      <ul>
+                        
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/notes/">
+                                    <span itemprop="name">Notes</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/rustling/">
+                                    <span itemprop="name">Rustling</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/about/">
+                                    <span itemprop="name">About</span>
+                                </a>
+                            </li>
+                        
+                        
+                        
+                      </ul>
+                    </nav>
+                </div>
+            </header>
+        
+        
+        <main>
+            
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <div itemprop="headline">
+        <h1>Rustling Iterator</h1>
+        <div class="border"></div>
+        <time datetime="2022-08-28" class="date" itemprop="datePublished">
+            28 Aug 2022
+        </time>
+    </div>
+    <div itemprop="articleBody">
+        <p>Iterator 3
+std::iter::iterator::collect can determine what collection it needs to create. and an iterator of Result&lt;T, E&gt; items can be collected into Result&lt;Collection<T>, E&gt;.</p>
+<pre style="background-color:#2b303b;">
+<code class="language-rust" data-lang="rust"><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">derive</span><span style="color:#c0c5ce;">(Debug, PartialEq, Eq)]
+</span><span style="color:#b48ead;">pub enum </span><span style="color:#c0c5ce;">DivisionError {
+    NotDivisible(NotDivisibleError),
+    DivideByZero,
+}
+
+#[</span><span style="color:#bf616a;">derive</span><span style="color:#c0c5ce;">(Debug, PartialEq, Eq)]
+</span><span style="color:#b48ead;">pub struct </span><span style="color:#c0c5ce;">NotDivisibleError {
+    </span><span style="color:#bf616a;">dividend</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">i32</span><span style="color:#c0c5ce;">,
+    </span><span style="color:#bf616a;">divisor</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">i32</span><span style="color:#c0c5ce;">,
+}
+
+</span><span style="color:#65737e;">// Calculate `a` divided by `b` if `a` is evenly divisible by `b`.
+// Otherwise, return a suitable error.
+</span><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">divide</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">a</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">i32</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">b</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">i32</span><span style="color:#c0c5ce;">) -&gt; Result&lt;</span><span style="color:#b48ead;">i32</span><span style="color:#c0c5ce;">, DivisionError&gt; {
+    </span><span style="color:#b48ead;">if</span><span style="color:#c0c5ce;"> b==</span><span style="color:#d08770;">0 </span><span style="color:#c0c5ce;">{
+        Err(DivisionError::DivideByZero)
+    }
+    </span><span style="color:#b48ead;">else if</span><span style="color:#c0c5ce;"> a%b!=</span><span style="color:#d08770;">0 </span><span style="color:#c0c5ce;">{
+        Err(DivisionError::NotDivisible(NotDivisibleError{
+            dividend: a, 
+            divisor: b}))
+    }
+    </span><span style="color:#b48ead;">else </span><span style="color:#c0c5ce;">{
+        Ok(a/b)
+    }
+}
+
+</span><span style="color:#65737e;">// Complete the function and return a value of the correct type so the test passes.
+// Desired output: Ok([1, 11, 1426, 3])
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">result_with_list</span><span style="color:#c0c5ce;">() -&gt; Result&lt;Vec&lt;</span><span style="color:#b48ead;">i32</span><span style="color:#c0c5ce;">&gt;, DivisionError&gt; {
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> numbers = vec![</span><span style="color:#d08770;">27</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">297</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">38502</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">81</span><span style="color:#c0c5ce;">];
+    numbers.</span><span style="color:#96b5b4;">into_iter</span><span style="color:#c0c5ce;">().</span><span style="color:#96b5b4;">map</span><span style="color:#c0c5ce;">(|</span><span style="color:#bf616a;">n</span><span style="color:#c0c5ce;">| </span><span style="color:#96b5b4;">divide</span><span style="color:#c0c5ce;">(n, </span><span style="color:#d08770;">27</span><span style="color:#c0c5ce;">)).</span><span style="color:#96b5b4;">collect</span><span style="color:#c0c5ce;">()
+}
+
+</span><span style="color:#65737e;">// Complete the function and return a value of the correct type so the test passes.
+// Desired output: [Ok(1), Ok(11), Ok(1426), Ok(3)]
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">list_of_results</span><span style="color:#c0c5ce;">() -&gt; Vec&lt;Result&lt;</span><span style="color:#b48ead;">i32</span><span style="color:#c0c5ce;">, DivisionError&gt;&gt;{
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> numbers = vec![</span><span style="color:#d08770;">27</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">297</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">38502</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">81</span><span style="color:#c0c5ce;">];
+    numbers.</span><span style="color:#96b5b4;">into_iter</span><span style="color:#c0c5ce;">().</span><span style="color:#96b5b4;">map</span><span style="color:#c0c5ce;">(|</span><span style="color:#bf616a;">n</span><span style="color:#c0c5ce;">| </span><span style="color:#96b5b4;">divide</span><span style="color:#c0c5ce;">(n, </span><span style="color:#d08770;">27</span><span style="color:#c0c5ce;">)).</span><span style="color:#96b5b4;">collect</span><span style="color:#c0c5ce;">()
+}
+
+#[</span><span style="color:#bf616a;">cfg</span><span style="color:#c0c5ce;">(test)]
+</span><span style="color:#b48ead;">mod </span><span style="color:#c0c5ce;">tests {
+    </span><span style="color:#b48ead;">use super</span><span style="color:#c0c5ce;">::*;
+
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">test_success</span><span style="color:#c0c5ce;">() {
+        assert_eq!(</span><span style="color:#96b5b4;">divide</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">81</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">9</span><span style="color:#c0c5ce;">), Ok(</span><span style="color:#d08770;">9</span><span style="color:#c0c5ce;">));
+    }
+
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">test_not_divisible</span><span style="color:#c0c5ce;">() {
+        assert_eq!(
+            </span><span style="color:#96b5b4;">divide</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">81</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">6</span><span style="color:#c0c5ce;">),
+            Err(DivisionError::NotDivisible(NotDivisibleError {
+                dividend: </span><span style="color:#d08770;">81</span><span style="color:#c0c5ce;">,
+                divisor: </span><span style="color:#d08770;">6
+            </span><span style="color:#c0c5ce;">}))
+        );
+    }
+
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">test_divide_by_0</span><span style="color:#c0c5ce;">() {
+        assert_eq!(</span><span style="color:#96b5b4;">divide</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">81</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">), Err(DivisionError::DivideByZero));
+    }
+
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">test_divide_0_by_something</span><span style="color:#c0c5ce;">() {
+        assert_eq!(</span><span style="color:#96b5b4;">divide</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">81</span><span style="color:#c0c5ce;">), Ok(</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">));
+    }
+
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">test_result_with_list</span><span style="color:#c0c5ce;">() {
+        assert_eq!(format!(&quot;</span><span style="color:#d08770;">{:?}</span><span style="color:#c0c5ce;">&quot;, </span><span style="color:#96b5b4;">result_with_list</span><span style="color:#c0c5ce;">()), &quot;</span><span style="color:#a3be8c;">Ok([1, 11, 1426, 3])</span><span style="color:#c0c5ce;">&quot;);
+    }
+
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">test_list_of_results</span><span style="color:#c0c5ce;">() {
+        assert_eq!(
+            format!(&quot;</span><span style="color:#d08770;">{:?}</span><span style="color:#c0c5ce;">&quot;, </span><span style="color:#96b5b4;">list_of_results</span><span style="color:#c0c5ce;">()),
+            &quot;</span><span style="color:#a3be8c;">[Ok(1), Ok(11), Ok(1426), Ok(3)]</span><span style="color:#c0c5ce;">&quot;
+        );
+    }
+}
+
+</span></code></pre>
+<p><a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.fold">Fold</a></p>
+<pre style="background-color:#2b303b;">
+<code class="language-rust" data-lang="rust"><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">factorial</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">num</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">u64</span><span style="color:#c0c5ce;">) -&gt; </span><span style="color:#b48ead;">u64 </span><span style="color:#c0c5ce;">{
+    </span><span style="color:#65737e;">// Complete this function to return the factorial of num
+    // Do not use:
+    // - return
+    // Try not to use:
+    // - imperative style loops (for, while)
+    // - additional variables
+    // For an extra challenge, don&#39;t use:
+    // - recursion
+    // Execute `rustlings hint iterators4` for hints.
+    </span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">..=num).</span><span style="color:#96b5b4;">fold</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">, |</span><span style="color:#bf616a;">acc</span><span style="color:#c0c5ce;">,</span><span style="color:#bf616a;">x</span><span style="color:#c0c5ce;">| acc*x)
+}
+
+#[</span><span style="color:#bf616a;">cfg</span><span style="color:#c0c5ce;">(test)]
+</span><span style="color:#b48ead;">mod </span><span style="color:#c0c5ce;">tests {
+    </span><span style="color:#b48ead;">use super</span><span style="color:#c0c5ce;">::*;
+
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">factorial_of_0</span><span style="color:#c0c5ce;">() {
+        assert_eq!(</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">, </span><span style="color:#96b5b4;">factorial</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">));
+    }
+
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">factorial_of_1</span><span style="color:#c0c5ce;">() {
+        assert_eq!(</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">, </span><span style="color:#96b5b4;">factorial</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">));
+    }
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">factorial_of_2</span><span style="color:#c0c5ce;">() {
+        assert_eq!(</span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">, </span><span style="color:#96b5b4;">factorial</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">));
+    }
+
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">factorial_of_4</span><span style="color:#c0c5ce;">() {
+        assert_eq!(</span><span style="color:#d08770;">24</span><span style="color:#c0c5ce;">, </span><span style="color:#96b5b4;">factorial</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">4</span><span style="color:#c0c5ce;">));
+    }
+}
+
+</span></code></pre>
+<p>Collect sum </p>
+<pre style="background-color:#2b303b;">
+<code class="language-rust" data-lang="rust"><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">std::collections::HashMap;
+
+#[</span><span style="color:#bf616a;">derive</span><span style="color:#c0c5ce;">(Clone, Copy, PartialEq, Eq)]
+</span><span style="color:#b48ead;">enum </span><span style="color:#c0c5ce;">Progress {
+    None,
+    Some,
+    Complete,
+}
+
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">count_for</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">map</span><span style="color:#c0c5ce;">: &amp;HashMap&lt;String, Progress&gt;, </span><span style="color:#bf616a;">value</span><span style="color:#c0c5ce;">: Progress) -&gt; </span><span style="color:#b48ead;">usize </span><span style="color:#c0c5ce;">{
+    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> count = </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">;
+    </span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;"> val in map.</span><span style="color:#96b5b4;">values</span><span style="color:#c0c5ce;">() {
+        </span><span style="color:#b48ead;">if</span><span style="color:#c0c5ce;"> val == &amp;value {
+            count += </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">;
+        }
+    }
+    count
+}
+
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">count_iterator</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">map</span><span style="color:#c0c5ce;">: &amp;HashMap&lt;String, Progress&gt;, </span><span style="color:#bf616a;">value</span><span style="color:#c0c5ce;">: Progress) -&gt; </span><span style="color:#b48ead;">usize </span><span style="color:#c0c5ce;">{
+    </span><span style="color:#65737e;">// map is a hashmap with String keys and Progress values.
+    // map = { &quot;variables1&quot;: Complete, &quot;from_str&quot;: None, ... }
+</span><span style="color:#c0c5ce;">    map.</span><span style="color:#96b5b4;">values</span><span style="color:#c0c5ce;">().</span><span style="color:#96b5b4;">into_iter</span><span style="color:#c0c5ce;">().</span><span style="color:#96b5b4;">filter</span><span style="color:#c0c5ce;">(|&amp;</span><span style="color:#bf616a;">n</span><span style="color:#c0c5ce;">| n== &amp;value).</span><span style="color:#96b5b4;">count</span><span style="color:#c0c5ce;">()
+}
+
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">count_collection_for</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">collection</span><span style="color:#c0c5ce;">: &amp;[HashMap&lt;String, Progress&gt;], </span><span style="color:#bf616a;">value</span><span style="color:#c0c5ce;">: Progress) -&gt; </span><span style="color:#b48ead;">usize </span><span style="color:#c0c5ce;">{
+    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> count = </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">;
+    </span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;"> map in collection {
+        </span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;"> val in map.</span><span style="color:#96b5b4;">values</span><span style="color:#c0c5ce;">() {
+            </span><span style="color:#b48ead;">if</span><span style="color:#c0c5ce;"> val == &amp;value {
+                count += </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">;
+            }
+        }
+    }
+    count
+}
+
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">count_collection_iterator</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">collection</span><span style="color:#c0c5ce;">: &amp;[HashMap&lt;String, Progress&gt;], </span><span style="color:#bf616a;">value</span><span style="color:#c0c5ce;">: Progress) -&gt; </span><span style="color:#b48ead;">usize </span><span style="color:#c0c5ce;">{
+    </span><span style="color:#65737e;">// collection is a slice of hashmaps.
+    // collection = [{ &quot;variables1&quot;: Complete, &quot;from_str&quot;: None, ... },
+    //     { &quot;variables2&quot;: Complete, ... }, ... ]
+</span><span style="color:#c0c5ce;">    collection.</span><span style="color:#96b5b4;">into_iter</span><span style="color:#c0c5ce;">().</span><span style="color:#96b5b4;">map</span><span style="color:#c0c5ce;">(|</span><span style="color:#bf616a;">m</span><span style="color:#c0c5ce;">| </span><span style="color:#96b5b4;">count_iterator</span><span style="color:#c0c5ce;">(m, value)).</span><span style="color:#96b5b4;">sum</span><span style="color:#c0c5ce;">()
+}
+
+#[</span><span style="color:#bf616a;">cfg</span><span style="color:#c0c5ce;">(test)]
+</span><span style="color:#b48ead;">mod </span><span style="color:#c0c5ce;">tests {
+    </span><span style="color:#b48ead;">use super</span><span style="color:#c0c5ce;">::*;
+
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">count_complete</span><span style="color:#c0c5ce;">() {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> map = </span><span style="color:#96b5b4;">get_map</span><span style="color:#c0c5ce;">();
+        assert_eq!(</span><span style="color:#d08770;">3</span><span style="color:#c0c5ce;">, </span><span style="color:#96b5b4;">count_iterator</span><span style="color:#c0c5ce;">(&amp;map, Progress::Complete));
+    }
+
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">count_equals_for</span><span style="color:#c0c5ce;">() {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> map = </span><span style="color:#96b5b4;">get_map</span><span style="color:#c0c5ce;">();
+        assert_eq!(
+            </span><span style="color:#96b5b4;">count_for</span><span style="color:#c0c5ce;">(&amp;map, Progress::Complete),
+            </span><span style="color:#96b5b4;">count_iterator</span><span style="color:#c0c5ce;">(&amp;map, Progress::Complete)
+        );
+    }
+
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">count_collection_complete</span><span style="color:#c0c5ce;">() {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> collection = </span><span style="color:#96b5b4;">get_vec_map</span><span style="color:#c0c5ce;">();
+        assert_eq!(
+            </span><span style="color:#d08770;">6</span><span style="color:#c0c5ce;">,
+            </span><span style="color:#96b5b4;">count_collection_iterator</span><span style="color:#c0c5ce;">(&amp;collection, Progress::Complete)
+        );
+    }
+
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">count_collection_equals_for</span><span style="color:#c0c5ce;">() {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> collection = </span><span style="color:#96b5b4;">get_vec_map</span><span style="color:#c0c5ce;">();
+        assert_eq!(
+            </span><span style="color:#96b5b4;">count_collection_for</span><span style="color:#c0c5ce;">(&amp;collection, Progress::Complete),
+            </span><span style="color:#96b5b4;">count_collection_iterator</span><span style="color:#c0c5ce;">(&amp;collection, Progress::Complete)
+        );
+    }
+
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">get_map</span><span style="color:#c0c5ce;">() -&gt; HashMap&lt;String, Progress&gt; {
+        </span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">Progress::*;
+
+        </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> map = HashMap::new();
+        map.</span><span style="color:#96b5b4;">insert</span><span style="color:#c0c5ce;">(String::from(&quot;</span><span style="color:#a3be8c;">variables1</span><span style="color:#c0c5ce;">&quot;), Complete);
+        map.</span><span style="color:#96b5b4;">insert</span><span style="color:#c0c5ce;">(String::from(&quot;</span><span style="color:#a3be8c;">functions1</span><span style="color:#c0c5ce;">&quot;), Complete);
+        map.</span><span style="color:#96b5b4;">insert</span><span style="color:#c0c5ce;">(String::from(&quot;</span><span style="color:#a3be8c;">hashmap1</span><span style="color:#c0c5ce;">&quot;), Complete);
+        map.</span><span style="color:#96b5b4;">insert</span><span style="color:#c0c5ce;">(String::from(&quot;</span><span style="color:#a3be8c;">arc1</span><span style="color:#c0c5ce;">&quot;), Some);
+        map.</span><span style="color:#96b5b4;">insert</span><span style="color:#c0c5ce;">(String::from(&quot;</span><span style="color:#a3be8c;">as_ref_mut</span><span style="color:#c0c5ce;">&quot;), None);
+        map.</span><span style="color:#96b5b4;">insert</span><span style="color:#c0c5ce;">(String::from(&quot;</span><span style="color:#a3be8c;">from_str</span><span style="color:#c0c5ce;">&quot;), None);
+
+        map
+    }
+
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">get_vec_map</span><span style="color:#c0c5ce;">() -&gt; Vec&lt;HashMap&lt;String, Progress&gt;&gt; {
+        </span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">Progress::*;
+
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> map = </span><span style="color:#96b5b4;">get_map</span><span style="color:#c0c5ce;">();
+
+        </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> other = HashMap::new();
+        other.</span><span style="color:#96b5b4;">insert</span><span style="color:#c0c5ce;">(String::from(&quot;</span><span style="color:#a3be8c;">variables2</span><span style="color:#c0c5ce;">&quot;), Complete);
+        other.</span><span style="color:#96b5b4;">insert</span><span style="color:#c0c5ce;">(String::from(&quot;</span><span style="color:#a3be8c;">functions2</span><span style="color:#c0c5ce;">&quot;), Complete);
+        other.</span><span style="color:#96b5b4;">insert</span><span style="color:#c0c5ce;">(String::from(&quot;</span><span style="color:#a3be8c;">if1</span><span style="color:#c0c5ce;">&quot;), Complete);
+        other.</span><span style="color:#96b5b4;">insert</span><span style="color:#c0c5ce;">(String::from(&quot;</span><span style="color:#a3be8c;">from_into</span><span style="color:#c0c5ce;">&quot;), None);
+        other.</span><span style="color:#96b5b4;">insert</span><span style="color:#c0c5ce;">(String::from(&quot;</span><span style="color:#a3be8c;">try_from_into</span><span style="color:#c0c5ce;">&quot;), None);
+
+        vec![map, other]
+    }
+}
+
+
+</span></code></pre>
+    </div>
+</article>
+
+        </main>
+        
+        <footer>
+            
+            <div class="border"></div>
+            <div class="footer">
+                <small class="footer-left">
+                    Copyright &copy; Yang Yang
+                </small>
+                <small class="footer-right">
+                    Powered by <a href="https://www.getzola.org">Zola</a> | Theme <a href="https://github.com/barlog-m/oceanic-zen">Oceanic Zen</a>
+                </small>
+            </div>
+        
+        </footer>
+    
+        </div>
+    </body>
+</html>

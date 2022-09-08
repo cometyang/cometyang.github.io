@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cometyang.github.io/sitemap.xml

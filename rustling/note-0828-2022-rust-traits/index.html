@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        
+
+        <title></title>
+
+        
+            <link rel="stylesheet" href="https://cometyang.github.io/theme.css">
+        
+        
+    </head>
+    <body>
+        <div class="content">
+        
+        
+            <header>
+                <div class="header-left">
+                    <a href="https:&#x2F;&#x2F;cometyang.github.io" class="logo"></a>
+                </div>
+                <div class="header-right">
+                    <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+                      <ul>
+                        
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/notes/">
+                                    <span itemprop="name">Notes</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/rustling/">
+                                    <span itemprop="name">Rustling</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/about/">
+                                    <span itemprop="name">About</span>
+                                </a>
+                            </li>
+                        
+                        
+                        
+                      </ul>
+                    </nav>
+                </div>
+            </header>
+        
+        
+        <main>
+            
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <div itemprop="headline">
+        <h1>Rustling Traits</h1>
+        <div class="border"></div>
+        <time datetime="2022-08-28" class="date" itemprop="datePublished">
+            28 Aug 2022
+        </time>
+    </div>
+    <div itemprop="articleBody">
+        <p>Traits as Parameters</p>
+<pre style="background-color:#2b303b;">
+<code class="language-rust" data-lang="rust"><span style="color:#b48ead;">pub trait </span><span style="color:#c0c5ce;">Licensed {
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">licensing_info</span><span style="color:#c0c5ce;">(&amp;</span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">) -&gt; String {
+        &quot;</span><span style="color:#a3be8c;">some information</span><span style="color:#c0c5ce;">&quot;.</span><span style="color:#96b5b4;">to_string</span><span style="color:#c0c5ce;">()
+    }
+}
+
+</span><span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">SomeSoftware {}
+
+</span><span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">OtherSoftware {}
+
+</span><span style="color:#b48ead;">impl </span><span style="color:#c0c5ce;">Licensed </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">SomeSoftware {}
+</span><span style="color:#b48ead;">impl </span><span style="color:#c0c5ce;">Licensed </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">OtherSoftware {}
+
+</span><span style="color:#65737e;">// YOU MAY ONLY CHANGE THE NEXT LINE
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">compare_license_types</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">software</span><span style="color:#c0c5ce;">: impl Licensed, </span><span style="color:#bf616a;">software_two</span><span style="color:#c0c5ce;">: impl Licensed) -&gt; </span><span style="color:#b48ead;">bool </span><span style="color:#c0c5ce;">{
+    software.</span><span style="color:#96b5b4;">licensing_info</span><span style="color:#c0c5ce;">() == software_two.</span><span style="color:#96b5b4;">licensing_info</span><span style="color:#c0c5ce;">()
+}
+
+#[</span><span style="color:#bf616a;">cfg</span><span style="color:#c0c5ce;">(test)]
+</span><span style="color:#b48ead;">mod </span><span style="color:#c0c5ce;">tests {
+    </span><span style="color:#b48ead;">use super</span><span style="color:#c0c5ce;">::*;
+
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">compare_license_information</span><span style="color:#c0c5ce;">() {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> some_software = SomeSoftware {};
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> other_software = OtherSoftware {};
+
+        assert!(</span><span style="color:#96b5b4;">compare_license_types</span><span style="color:#c0c5ce;">(some_software, other_software));
+    }
+
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">compare_license_information_backwards</span><span style="color:#c0c5ce;">() {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> some_software = SomeSoftware {};
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> other_software = OtherSoftware {};
+
+        assert!(</span><span style="color:#96b5b4;">compare_license_types</span><span style="color:#c0c5ce;">(other_software, some_software));
+    }
+}
+
+</span></code></pre><pre style="background-color:#2b303b;">
+<code class="language-rust" data-lang="rust"><span style="color:#b48ead;">pub trait </span><span style="color:#c0c5ce;">SomeTrait {
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">some_function</span><span style="color:#c0c5ce;">(&amp;</span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">) -&gt; </span><span style="color:#b48ead;">bool </span><span style="color:#c0c5ce;">{
+        </span><span style="color:#d08770;">true
+    </span><span style="color:#c0c5ce;">}
+}
+
+</span><span style="color:#b48ead;">pub trait </span><span style="color:#c0c5ce;">OtherTrait {
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">other_function</span><span style="color:#c0c5ce;">(&amp;</span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">) -&gt; </span><span style="color:#b48ead;">bool </span><span style="color:#c0c5ce;">{
+        </span><span style="color:#d08770;">true
+    </span><span style="color:#c0c5ce;">}
+}
+
+</span><span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">SomeStruct {}
+</span><span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">OtherStruct {}
+
+</span><span style="color:#b48ead;">impl </span><span style="color:#c0c5ce;">SomeTrait </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">SomeStruct {}
+</span><span style="color:#b48ead;">impl </span><span style="color:#c0c5ce;">OtherTrait </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">SomeStruct {}
+</span><span style="color:#b48ead;">impl </span><span style="color:#c0c5ce;">SomeTrait </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">OtherStruct {}
+</span><span style="color:#b48ead;">impl </span><span style="color:#c0c5ce;">OtherTrait </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">OtherStruct {}
+
+</span><span style="color:#65737e;">// YOU MAY ONLY CHANGE THE NEXT LINE
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">some_func</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">item</span><span style="color:#c0c5ce;">: impl SomeTrait+OtherTrait) -&gt; </span><span style="color:#b48ead;">bool </span><span style="color:#c0c5ce;">{
+    item.</span><span style="color:#96b5b4;">some_function</span><span style="color:#c0c5ce;">() &amp;&amp; item.</span><span style="color:#96b5b4;">other_function</span><span style="color:#c0c5ce;">()
+}
+
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">() {
+    </span><span style="color:#96b5b4;">some_func</span><span style="color:#c0c5ce;">(SomeStruct {});
+    </span><span style="color:#96b5b4;">some_func</span><span style="color:#c0c5ce;">(OtherStruct {});
+}
+
+</span></code></pre>
+<p>Quiz 3</p>
+<pre style="background-color:#2b303b;">
+<code class="language-rust" data-lang="rust"><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">std::fmt::Display;
+</span><span style="color:#b48ead;">pub struct </span><span style="color:#c0c5ce;">ReportCard&lt;T: Display&gt; {
+    </span><span style="color:#b48ead;">pub </span><span style="color:#bf616a;">grade</span><span style="color:#c0c5ce;">: T,
+    </span><span style="color:#b48ead;">pub </span><span style="color:#bf616a;">student_name</span><span style="color:#c0c5ce;">: String,
+    </span><span style="color:#b48ead;">pub </span><span style="color:#bf616a;">student_age</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">u8</span><span style="color:#c0c5ce;">,
+}
+
+</span><span style="color:#b48ead;">impl</span><span style="color:#c0c5ce;">&lt;T:Display&gt; ReportCard&lt;T&gt; {
+    </span><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">print</span><span style="color:#c0c5ce;">(&amp;</span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">) -&gt; String {
+        format!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> (</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">) - achieved a grade of </span><span style="color:#d08770;">{}</span><span style="color:#c0c5ce;">&quot;,
+            &amp;</span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">.student_name, &amp;</span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">.student_age, &amp;</span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">.grade)
+    }
+}
+
+#[</span><span style="color:#bf616a;">cfg</span><span style="color:#c0c5ce;">(test)]
+</span><span style="color:#b48ead;">mod </span><span style="color:#c0c5ce;">tests {
+    </span><span style="color:#b48ead;">use super</span><span style="color:#c0c5ce;">::*;
+
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">generate_numeric_report_card</span><span style="color:#c0c5ce;">() {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> report_card = ReportCard {
+            grade: </span><span style="color:#d08770;">2.1</span><span style="color:#c0c5ce;">,
+            student_name: &quot;</span><span style="color:#a3be8c;">Tom Wriggle</span><span style="color:#c0c5ce;">&quot;.</span><span style="color:#96b5b4;">to_string</span><span style="color:#c0c5ce;">(),
+            student_age: </span><span style="color:#d08770;">12</span><span style="color:#c0c5ce;">,
+        };
+        assert_eq!(
+            report_card.</span><span style="color:#96b5b4;">print</span><span style="color:#c0c5ce;">(),
+            &quot;</span><span style="color:#a3be8c;">Tom Wriggle (12) - achieved a grade of 2.1</span><span style="color:#c0c5ce;">&quot;
+        );
+    }
+
+    #[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">generate_alphabetic_report_card</span><span style="color:#c0c5ce;">() {
+        </span><span style="color:#65737e;">// TODO: Make sure to change the grade here after you finish the exercise.
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> report_card = ReportCard {
+            grade: &quot;</span><span style="color:#a3be8c;">A+</span><span style="color:#c0c5ce;">&quot;,
+            student_name: &quot;</span><span style="color:#a3be8c;">Gary Plotter</span><span style="color:#c0c5ce;">&quot;.</span><span style="color:#96b5b4;">to_string</span><span style="color:#c0c5ce;">(),
+            student_age: </span><span style="color:#d08770;">11</span><span style="color:#c0c5ce;">,
+        };
+        assert_eq!(
+            report_card.</span><span style="color:#96b5b4;">print</span><span style="color:#c0c5ce;">(),
+            &quot;</span><span style="color:#a3be8c;">Gary Plotter (11) - achieved a grade of A+</span><span style="color:#c0c5ce;">&quot;
+        );
+    }
+}
+
+</span></code></pre>
+    </div>
+</article>
+
+        </main>
+        
+        <footer>
+            
+            <div class="border"></div>
+            <div class="footer">
+                <small class="footer-left">
+                    Copyright &copy; Yang Yang
+                </small>
+                <small class="footer-right">
+                    Powered by <a href="https://www.getzola.org">Zola</a> | Theme <a href="https://github.com/barlog-m/oceanic-zen">Oceanic Zen</a>
+                </small>
+            </div>
+        
+        </footer>
+    
+        </div>
+    </body>
+</html>

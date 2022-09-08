@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        
+
+        <title></title>
+
+        
+            <link rel="stylesheet" href="https://cometyang.github.io/theme.css">
+        
+        
+    </head>
+    <body>
+        <div class="content">
+        
+        
+            <header>
+                <div class="header-left">
+                    <a href="https:&#x2F;&#x2F;cometyang.github.io" class="logo"></a>
+                </div>
+                <div class="header-right">
+                    <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+                      <ul>
+                        
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/notes/">
+                                    <span itemprop="name">Notes</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/rustling/">
+                                    <span itemprop="name">Rustling</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/about/">
+                                    <span itemprop="name">About</span>
+                                </a>
+                            </li>
+                        
+                        
+                        
+                      </ul>
+                    </nav>
+                </div>
+            </header>
+        
+        
+        <main>
+            
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <div itemprop="headline">
+        <h1>Rustling notes: mutable parameters</h1>
+        <div class="border"></div>
+        <time datetime="2022-08-24" class="date" itemprop="datePublished">
+            24 Aug 2022
+        </time>
+    </div>
+    <div itemprop="articleBody">
+        <p>Using this website <a href="https://godbolt.org/">Compiler explorer</a> explored mutable parameters.
+Another blog to explain <a href="https://www.snoyman.com/blog/2020/05/no-mutable-parameters-in-rust/">the topic</a>.</p>
+<ul>
+<li>mutable reference</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<code class="language-rust" data-lang="rust"><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">() {
+    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> x = </span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">;
+    </span><span style="color:#96b5b4;">plus_one</span><span style="color:#c0c5ce;">(&amp;</span><span style="color:#b48ead;">mut</span><span style="color:#c0c5ce;"> x);
+}
+
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">plus_one</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">x</span><span style="color:#c0c5ce;">: &amp;</span><span style="color:#b48ead;">mut i32</span><span style="color:#c0c5ce;">) {
+    (*x) += </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">;
+}
+</span></code></pre>
+<p>The assembly code</p>
+<pre style="background-color:#2b303b;">
+<code class="language-assembly" data-lang="assembly"><span style="color:#c0c5ce;">example::main:
+        push    rax
+        mov     dword ptr [rsp + 4], 5
+        lea     rdi, [rsp + 4]
+        call    example::plus_one
+        pop     rax
+        ret
+
+example::plus_one:
+        sub     rsp, 24
+        mov     qword ptr [rsp + 8], rdi
+        mov     eax, dword ptr [rdi]
+        inc     eax
+        mov     dword ptr [rsp + 20], eax
+        seto    al
+        test    al, 1
+        jne     .LBB1_2
+        mov     rax, qword ptr [rsp + 8]
+        mov     ecx, dword ptr [rsp + 20]
+        mov     dword ptr [rax], ecx
+        add     rsp, 24
+        ret
+.LBB1_2:
+        lea     rdi, [rip + str.0]
+        lea     rdx, [rip + .L__unnamed_1]
+        mov     rax, qword ptr [rip + core::panicking::panic@GOTPCREL]
+        mov     esi, 28
+        call    rax
+        ud2
+
+.L__unnamed_2:
+        .ascii  &quot;/app/example.rs&quot;
+
+.L__unnamed_1:
+        .quad   .L__unnamed_2
+        .asciz  &quot;\017\000\000\000\000\000\000\000\007\000\000\000\005\000\000&quot;
+
+str.0:
+        .ascii  &quot;attempt to add with overflow&quot;
+</span></code></pre>
+<ul>
+<li>mutable parameter (&quot;In fact, moving-into-mutable is something that can happen even without a function call.&quot;):</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<code class="language-rust" data-lang="rust"><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">() {
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> x = </span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">;
+    </span><span style="color:#96b5b4;">plus_one</span><span style="color:#c0c5ce;">(x);
+}
+
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">plus_one</span><span style="color:#c0c5ce;">(</span><span style="color:#b48ead;">mut </span><span style="color:#bf616a;">x</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">i32</span><span style="color:#c0c5ce;">) {
+    x += </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">;
+}
+</span></code></pre><pre style="background-color:#2b303b;">
+<code class="language-asmemmbly" data-lang="asmemmbly"><span style="color:#c0c5ce;">example::main:
+        push    rax
+        mov     edi, 5
+        call    example::plus_one
+        pop     rax
+        ret
+
+example::plus_one:
+        push    rax
+        mov     dword ptr [rsp + 4], edi
+        mov     eax, dword ptr [rsp + 4]
+        inc     eax
+        mov     dword ptr [rsp], eax
+        seto    al
+        test    al, 1
+        jne     .LBB1_2
+        mov     eax, dword ptr [rsp]
+        mov     dword ptr [rsp + 4], eax
+        pop     rax
+        ret
+.LBB1_2:
+        lea     rdi, [rip + str.0]
+        lea     rdx, [rip + .L__unnamed_1]
+        mov     rax, qword ptr [rip + core::panicking::panic@GOTPCREL]
+        mov     esi, 28
+        call    rax
+        ud2
+
+.L__unnamed_2:
+        .ascii  &quot;/app/example.rs&quot;
+
+.L__unnamed_1:
+        .quad   .L__unnamed_2
+        .asciz  &quot;\017\000\000\000\000\000\000\000\007\000\000\000\005\000\000&quot;
+
+str.0:
+        .ascii  &quot;attempt to add with overflow&quot;
+
+</span></code></pre>
+    </div>
+</article>
+
+        </main>
+        
+        <footer>
+            
+            <div class="border"></div>
+            <div class="footer">
+                <small class="footer-left">
+                    Copyright &copy; Yang Yang
+                </small>
+                <small class="footer-right">
+                    Powered by <a href="https://www.getzola.org">Zola</a> | Theme <a href="https://github.com/barlog-m/oceanic-zen">Oceanic Zen</a>
+                </small>
+            </div>
+        
+        </footer>
+    
+        </div>
+    </body>
+</html>
