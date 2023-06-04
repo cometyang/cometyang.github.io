@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        
+
+        <title></title>
+
+        
+            <link rel="stylesheet" href="https://cometyang.github.io/theme.css">
+        
+        
+    </head>
+    <body>
+        <div class="content">
+        
+        
+            <header>
+                <div class="header-left">
+                    <a href="https:&#x2F;&#x2F;cometyang.github.io" class="logo"></a>
+                </div>
+                <div class="header-right">
+                    <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+                      <ul>
+                        
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/machinelearning/">
+                                    <span itemprop="name">Machine Learning</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/notes/">
+                                    <span itemprop="name">Notes</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/rustling/">
+                                    <span itemprop="name">Rustling</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/about/">
+                                    <span itemprop="name">About</span>
+                                </a>
+                            </li>
+                        
+                        
+                        
+                      </ul>
+                    </nav>
+                </div>
+            </header>
+        
+        
+        <main>
+            
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <div itemprop="headline">
+        <h1>Rustling notes</h1>
+        <div class="border"></div>
+        <time datetime="2022-08-23" class="date" itemprop="datePublished">
+            23 Aug 2022
+        </time>
+    </div>
+    <div itemprop="articleBody">
+        <p>For array declaration</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">let</span><span> a = [</span><span style="color:#d08770;">5</span><span>;</span><span style="color:#d08770;">100</span><span>] </span><span style="color:#65737e;">// an array length is 100
+</span></code></pre>
+<p>For slice</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">let</span><span> a = [</span><span style="color:#d08770;">1</span><span>,</span><span style="color:#d08770;">2</span><span>,</span><span style="color:#d08770;">3</span><span>,</span><span style="color:#d08770;">4</span><span>,</span><span style="color:#d08770;">5</span><span>]
+</span><span>
+</span><span style="color:#b48ead;">let</span><span> aslice=&amp;a[</span><span style="color:#d08770;">1</span><span>..=</span><span style="color:#d08770;">3</span><span>] </span><span style="color:#65737e;">// [2,3,4]
+</span></code></pre>
+<p>For tuple index</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">let</span><span> numbers = (</span><span style="color:#d08770;">1</span><span>,</span><span style="color:#d08770;">2</span><span>,</span><span style="color:#d08770;">3</span><span>)
+</span><span style="color:#b48ead;">let</span><span> second = numbers.</span><span style="color:#d08770;">1 </span><span style="color:#65737e;">// the second element in tutple, 2
+</span></code></pre>
+<p>For vector</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">let</span><span> a = [</span><span style="color:#d08770;">10</span><span>,</span><span style="color:#d08770;">20</span><span>,</span><span style="color:#d08770;">30</span><span>,</span><span style="color:#d08770;">40</span><span>]
+</span><span style="color:#b48ead;">let</span><span> v = vec![</span><span style="color:#d08770;">10</span><span>,</span><span style="color:#d08770;">20</span><span>,</span><span style="color:#d08770;">30</span><span>,</span><span style="color:#d08770;">40</span><span>]
+</span><span style="color:#b48ead;">let</span><span> nv = Vec::new()
+</span></code></pre>
+<p>or </p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">let mut</span><span> v = Vec::new();
+</span><span>v.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">10</span><span>);
+</span><span>v.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">20</span><span>);
+</span><span>v.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">30</span><span>);
+</span><span>v.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">40</span><span>);
+</span></code></pre>
+<p>muliply a vector by 2</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">vec_loop</span><span>(</span><span style="color:#b48ead;">mut </span><span style="color:#bf616a;">v</span><span>: Vec&lt;</span><span style="color:#b48ead;">i32</span><span>&gt;) -&gt; Vec&lt;</span><span style="color:#b48ead;">i32</span><span>&gt; {
+</span><span>    </span><span style="color:#b48ead;">for</span><span> i in v.</span><span style="color:#96b5b4;">iter_mut</span><span>() {
+</span><span>        </span><span style="color:#65737e;">// TODO: Fill this up so that each element in the Vec `v` is
+</span><span>        </span><span style="color:#65737e;">// multiplied by 2.
+</span><span>        (*i)*=</span><span style="color:#d08770;">2
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// At this point, `v` should be equal to [4, 8, 12, 16, 20].
+</span><span>    v
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">vec_map</span><span>(</span><span style="color:#bf616a;">v</span><span>: &amp;Vec&lt;</span><span style="color:#b48ead;">i32</span><span>&gt;) -&gt; Vec&lt;</span><span style="color:#b48ead;">i32</span><span>&gt; {
+</span><span>    v.</span><span style="color:#96b5b4;">iter</span><span>().</span><span style="color:#96b5b4;">map</span><span>(|</span><span style="color:#bf616a;">num</span><span>| {
+</span><span>        </span><span style="color:#65737e;">// TODO: Do the same thing as above - but instead of mutating the
+</span><span>        </span><span style="color:#65737e;">// Vec, you can just return the new number!
+</span><span>        num*</span><span style="color:#d08770;">2
+</span><span>    }).</span><span style="color:#96b5b4;">collect</span><span>()
+</span><span>}
+</span></code></pre>
+<p>Move semantics</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> vec0 = Vec::new();
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> vec1 = </span><span style="color:#96b5b4;">fill_vec</span><span>(vec0); </span><span style="color:#65737e;">// add mut to make vec0 move to vec1
+</span><span>
+</span><span>    println!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> has length </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> content `</span><span style="color:#d08770;">{:?}</span><span style="color:#a3be8c;">`</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">vec1</span><span>&quot;, vec1.</span><span style="color:#96b5b4;">len</span><span>(), vec1);
+</span><span>  
+</span><span>    vec1.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">88</span><span>);
+</span><span>
+</span><span>    println!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> has length </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> content `</span><span style="color:#d08770;">{:?}</span><span style="color:#a3be8c;">`</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">vec1</span><span>&quot;, vec1.</span><span style="color:#96b5b4;">len</span><span>(), vec1);
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">fill_vec</span><span>(</span><span style="color:#bf616a;">vec</span><span>: Vec&lt;</span><span style="color:#b48ead;">i32</span><span>&gt;) -&gt; Vec&lt;</span><span style="color:#b48ead;">i32</span><span>&gt; {
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> vec = vec;
+</span><span>
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">22</span><span>);
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">44</span><span>);
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">66</span><span>);
+</span><span>
+</span><span>    vec
+</span><span>}
+</span><span>
+</span></code></pre>
+<p>move_semantics2 solution from this <a href="https://gist.github.com/Melvillian/17d10138f616893eeb88525987c6f7d5">gist link</a></p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#65737e;">/// given this uncompilable code
+</span><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> vec0 = Vec::new();
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> vec1 = </span><span style="color:#96b5b4;">fill_vec</span><span>(vec0);
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// Do not change the following line!
+</span><span>    println!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> has length </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> content `</span><span style="color:#d08770;">{:?}</span><span style="color:#a3be8c;">`</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">vec0</span><span>&quot;, vec0.</span><span style="color:#96b5b4;">len</span><span>(), vec0);
+</span><span>
+</span><span>    vec1.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">88</span><span>);
+</span><span>
+</span><span>    println!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> has length </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> content `</span><span style="color:#d08770;">{:?}</span><span style="color:#a3be8c;">`</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">vec1</span><span>&quot;, vec1.</span><span style="color:#96b5b4;">len</span><span>(), vec1);
+</span><span>
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">fill_vec</span><span>(</span><span style="color:#bf616a;">vec</span><span>: Vec&lt;</span><span style="color:#b48ead;">i32</span><span>&gt;) -&gt; Vec&lt;</span><span style="color:#b48ead;">i32</span><span>&gt; {
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> vec = vec;
+</span><span>
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">22</span><span>);
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">44</span><span>);
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">66</span><span>);
+</span><span>
+</span><span>    vec
+</span><span>}
+</span><span>
+</span><span>
+</span><span>
+</span><span>
+</span><span style="color:#65737e;">/// the solutions are:
+</span><span>
+</span><span>
+</span><span style="color:#65737e;">/// make another Vec to use in fill_vec
+</span><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> vec0 : Vec&lt;</span><span style="color:#b48ead;">i32</span><span>&gt; = Vec::new();
+</span><span>    </span><span style="color:#b48ead;">let</span><span> vec2 = Vec::new();
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> vec1 = </span><span style="color:#96b5b4;">fill_vec</span><span>(vec2);
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// Do not change the following line!
+</span><span>    println!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> has length </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> content `</span><span style="color:#d08770;">{:?}</span><span style="color:#a3be8c;">`</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">vec0</span><span>&quot;, vec0.</span><span style="color:#96b5b4;">len</span><span>(), vec0);
+</span><span>
+</span><span>    vec1.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">88</span><span>);
+</span><span>
+</span><span>    println!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> has length </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> content `</span><span style="color:#d08770;">{:?}</span><span style="color:#a3be8c;">`</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">vec1</span><span>&quot;, vec1.</span><span style="color:#96b5b4;">len</span><span>(), vec1);
+</span><span>
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">fill_vec</span><span>(</span><span style="color:#bf616a;">vec</span><span>: Vec&lt;</span><span style="color:#b48ead;">i32</span><span>&gt;) -&gt; Vec&lt;</span><span style="color:#b48ead;">i32</span><span>&gt; {
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> vec = vec;
+</span><span>
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">22</span><span>);
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">44</span><span>);
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">66</span><span>);
+</span><span>
+</span><span>    vec
+</span><span>}
+</span><span>
+</span><span>
+</span><span style="color:#65737e;">/// borrowing mutably
+</span><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> vec0 = Vec::new();
+</span><span>
+</span><span>    </span><span style="color:#96b5b4;">fill_vec</span><span>(&amp;</span><span style="color:#b48ead;">mut</span><span> vec0);
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// Do not change the following line!
+</span><span>    println!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> has length </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> content `</span><span style="color:#d08770;">{:?}</span><span style="color:#a3be8c;">`</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">vec0</span><span>&quot;, vec0.</span><span style="color:#96b5b4;">len</span><span>(), vec0);
+</span><span>
+</span><span>
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">fill_vec</span><span>(</span><span style="color:#bf616a;">vec</span><span>: &amp;</span><span style="color:#b48ead;">mut </span><span>Vec&lt;</span><span style="color:#b48ead;">i32</span><span>&gt;) -&gt; Vec&lt;</span><span style="color:#b48ead;">i32</span><span>&gt; {
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">22</span><span>);
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">44</span><span>);
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">66</span><span>);
+</span><span>
+</span><span>    vec.</span><span style="color:#96b5b4;">to_vec</span><span>()
+</span><span>}
+</span><span>
+</span><span>
+</span><span style="color:#65737e;">// simply borrowing
+</span><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> vec0 = Vec::new();
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> vec1 = </span><span style="color:#96b5b4;">fill_vec</span><span>(&amp;vec0);
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// Do not change the following line!
+</span><span>    println!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> has length </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> content `</span><span style="color:#d08770;">{:?}</span><span style="color:#a3be8c;">`</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">vec0</span><span>&quot;, vec0.</span><span style="color:#96b5b4;">len</span><span>(), vec0);
+</span><span>
+</span><span>    vec1.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">88</span><span>);
+</span><span>
+</span><span>    println!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> has length </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> content `</span><span style="color:#d08770;">{:?}</span><span style="color:#a3be8c;">`</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">vec1</span><span>&quot;, vec1.</span><span style="color:#96b5b4;">len</span><span>(), vec1);
+</span><span>
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">fill_vec</span><span>(</span><span style="color:#bf616a;">vec</span><span>:&amp; Vec&lt;</span><span style="color:#b48ead;">i32</span><span>&gt;) -&gt; Vec&lt;</span><span style="color:#b48ead;">i32</span><span>&gt; {
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> vec = vec.</span><span style="color:#96b5b4;">clone</span><span>();
+</span><span>
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">22</span><span>);
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">44</span><span>);
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">66</span><span>);
+</span><span>
+</span><span>    vec
+</span><span>}
+</span><span>
+</span><span style="color:#65737e;">// soluton 4
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> vec0 = Vec::new();
+</span><span>
+</span><span>    </span><span style="color:#96b5b4;">fill_vec</span><span>(&amp;</span><span style="color:#b48ead;">mut</span><span> vec0);
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> vec1 = vec0.</span><span style="color:#96b5b4;">clone</span><span>();
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// Do not change the following line!
+</span><span>    println!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> has length </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> content `</span><span style="color:#d08770;">{:?}</span><span style="color:#a3be8c;">`</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">vec0</span><span>&quot;, vec0.</span><span style="color:#96b5b4;">len</span><span>(), vec0);
+</span><span>
+</span><span>    vec1.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">88</span><span>);
+</span><span>
+</span><span>    println!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> has length </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> content `</span><span style="color:#d08770;">{:?}</span><span style="color:#a3be8c;">`</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">vec1</span><span>&quot;, vec1.</span><span style="color:#96b5b4;">len</span><span>(), vec1);
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">fill_vec</span><span>(</span><span style="color:#bf616a;">vec</span><span>: &amp;</span><span style="color:#b48ead;">mut </span><span>Vec&lt;</span><span style="color:#b48ead;">i32</span><span>&gt;) {
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">22</span><span>);
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">44</span><span>);
+</span><span>    vec.</span><span style="color:#96b5b4;">push</span><span>(</span><span style="color:#d08770;">66</span><span>);
+</span><span>}
+</span><span>
+</span></code></pre>
+
+    </div>
+</article>
+
+        </main>
+        
+        <footer>
+            
+            <div class="border"></div>
+            <div class="footer">
+                <small class="footer-left">
+                    Copyright &copy; Yang Yang
+                </small>
+                <small class="footer-right">
+                    Powered by <a href="https://www.getzola.org">Zola</a> | Theme <a href="https://github.com/barlog-m/oceanic-zen">Oceanic Zen</a>
+                </small>
+            </div>
+        
+        </footer>
+    
+        </div>
+    </body>
+</html>

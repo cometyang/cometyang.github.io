@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        
+
+        <title></title>
+
+        
+            <link rel="stylesheet" href="https://cometyang.github.io/theme.css">
+        
+        
+    </head>
+    <body>
+        <div class="content">
+        
+        
+            <header>
+                <div class="header-left">
+                    <a href="https:&#x2F;&#x2F;cometyang.github.io" class="logo"></a>
+                </div>
+                <div class="header-right">
+                    <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+                      <ul>
+                        
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/machinelearning/">
+                                    <span itemprop="name">Machine Learning</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/notes/">
+                                    <span itemprop="name">Notes</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/rustling/">
+                                    <span itemprop="name">Rustling</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/about/">
+                                    <span itemprop="name">About</span>
+                                </a>
+                            </li>
+                        
+                        
+                        
+                      </ul>
+                    </nav>
+                </div>
+            </header>
+        
+        
+        <main>
+            
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <div itemprop="headline">
+        <h1>Rustling notes: Enum</h1>
+        <div class="border"></div>
+        <time datetime="2022-08-26" class="date" itemprop="datePublished">
+            26 Aug 2022
+        </time>
+    </div>
+    <div itemprop="articleBody">
+        <p>Rust can use Enum to represent Rich Data Structure. (code example from Programming Rust.)</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span>
+</span><span style="color:#b48ead;">enum </span><span>Json {
+</span><span>        Null,
+</span><span>        Boolean(</span><span style="color:#b48ead;">bool</span><span>),
+</span><span>        Number(</span><span style="color:#b48ead;">f64</span><span>),
+</span><span>        String(String),
+</span><span>        Array(Vec&lt;Json&gt;),
+</span><span>        Object(Box&lt;HashMap&lt;String, Json&gt;&gt;),
+</span><span>}
+</span><span>
+</span></code></pre>
+<p>Solution for enums3.rs</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">enum </span><span>Message {
+</span><span>    </span><span style="color:#65737e;">// TODO: implement the message variant types based on their usage below
+</span><span>    Echo(String),
+</span><span>    ChangeColor((</span><span style="color:#b48ead;">u8</span><span>, </span><span style="color:#b48ead;">u8</span><span>, </span><span style="color:#b48ead;">u8</span><span>)),
+</span><span>    Move(Point),
+</span><span>    Quit,
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">struct </span><span>Point {
+</span><span>    </span><span style="color:#bf616a;">x</span><span>: </span><span style="color:#b48ead;">u8</span><span>,
+</span><span>    </span><span style="color:#bf616a;">y</span><span>: </span><span style="color:#b48ead;">u8</span><span>,
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">struct </span><span>State {
+</span><span>    </span><span style="color:#bf616a;">color</span><span>: (</span><span style="color:#b48ead;">u8</span><span>, </span><span style="color:#b48ead;">u8</span><span>, </span><span style="color:#b48ead;">u8</span><span>),
+</span><span>    </span><span style="color:#bf616a;">position</span><span>: Point,
+</span><span>    </span><span style="color:#bf616a;">quit</span><span>: </span><span style="color:#b48ead;">bool</span><span>,
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">impl </span><span>State {
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">change_color</span><span>(&amp;</span><span style="color:#b48ead;">mut </span><span style="color:#bf616a;">self</span><span>, </span><span style="color:#bf616a;">color</span><span>: (</span><span style="color:#bf616a;">u8</span><span>, </span><span style="color:#bf616a;">u8</span><span>, </span><span style="color:#bf616a;">u8</span><span>)) {
+</span><span>        </span><span style="color:#bf616a;">self</span><span>.color = color;
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">quit</span><span>(&amp;</span><span style="color:#b48ead;">mut </span><span style="color:#bf616a;">self</span><span>) {
+</span><span>        </span><span style="color:#bf616a;">self</span><span>.quit = </span><span style="color:#d08770;">true</span><span>;
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">echo</span><span>(&amp;</span><span style="color:#bf616a;">self</span><span>, </span><span style="color:#bf616a;">s</span><span>: String) {
+</span><span>        println!(&quot;</span><span style="color:#d08770;">{}</span><span>&quot;, s);
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">move_position</span><span>(&amp;</span><span style="color:#b48ead;">mut </span><span style="color:#bf616a;">self</span><span>, </span><span style="color:#bf616a;">p</span><span>: Point) {
+</span><span>        </span><span style="color:#bf616a;">self</span><span>.position = p;
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">process</span><span>(&amp;</span><span style="color:#b48ead;">mut </span><span style="color:#bf616a;">self</span><span>, </span><span style="color:#bf616a;">message</span><span>: Message) {
+</span><span>        </span><span style="color:#65737e;">// TODO: create a match expression to process the different message variants
+</span><span>        </span><span style="color:#b48ead;">match</span><span> message {
+</span><span>            Message::ChangeColor(color) =&gt; </span><span style="color:#bf616a;">self</span><span>.</span><span style="color:#96b5b4;">change_color</span><span>(color),
+</span><span>            Message::Quit =&gt; </span><span style="color:#bf616a;">self</span><span>.</span><span style="color:#96b5b4;">quit</span><span>(),
+</span><span>            Message::Echo(words) =&gt; </span><span style="color:#bf616a;">self</span><span>.</span><span style="color:#96b5b4;">echo</span><span>(words),
+</span><span>            Message::Move(point) =&gt; </span><span style="color:#bf616a;">self</span><span>.</span><span style="color:#96b5b4;">move_position</span><span>(point),
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span>#[</span><span style="color:#bf616a;">cfg</span><span>(test)]
+</span><span style="color:#b48ead;">mod </span><span>tests {
+</span><span>    </span><span style="color:#b48ead;">use super</span><span>::*;
+</span><span>
+</span><span>    #[</span><span style="color:#bf616a;">test</span><span>]
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">test_match_message_call</span><span>() {
+</span><span>        </span><span style="color:#b48ead;">let mut</span><span> state = State {
+</span><span>            quit: </span><span style="color:#d08770;">false</span><span>,
+</span><span>            position: Point { x: </span><span style="color:#d08770;">0</span><span>, y: </span><span style="color:#d08770;">0 </span><span>},
+</span><span>            color: (</span><span style="color:#d08770;">0</span><span>, </span><span style="color:#d08770;">0</span><span>, </span><span style="color:#d08770;">0</span><span>),
+</span><span>        };
+</span><span>        state.</span><span style="color:#96b5b4;">process</span><span>(Message::ChangeColor((</span><span style="color:#d08770;">255</span><span>, </span><span style="color:#d08770;">0</span><span>, </span><span style="color:#d08770;">255</span><span>)));
+</span><span>        state.</span><span style="color:#96b5b4;">process</span><span>(Message::Echo(String::from(&quot;</span><span style="color:#a3be8c;">hello world</span><span>&quot;)));
+</span><span>        state.</span><span style="color:#96b5b4;">process</span><span>(Message::Move(Point { x: </span><span style="color:#d08770;">10</span><span>, y: </span><span style="color:#d08770;">15 </span><span>}));
+</span><span>        state.</span><span style="color:#96b5b4;">process</span><span>(Message::Quit);
+</span><span>
+</span><span>        assert_eq!(state.color, (</span><span style="color:#d08770;">255</span><span>, </span><span style="color:#d08770;">0</span><span>, </span><span style="color:#d08770;">255</span><span>));
+</span><span>        assert_eq!(state.position.x, </span><span style="color:#d08770;">10</span><span>);
+</span><span>        assert_eq!(state.position.y, </span><span style="color:#d08770;">15</span><span>);
+</span><span>        assert_eq!(state.quit, </span><span style="color:#d08770;">true</span><span>);
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span>
+</span></code></pre>
+
+    </div>
+</article>
+
+        </main>
+        
+        <footer>
+            
+            <div class="border"></div>
+            <div class="footer">
+                <small class="footer-left">
+                    Copyright &copy; Yang Yang
+                </small>
+                <small class="footer-right">
+                    Powered by <a href="https://www.getzola.org">Zola</a> | Theme <a href="https://github.com/barlog-m/oceanic-zen">Oceanic Zen</a>
+                </small>
+            </div>
+        
+        </footer>
+    
+        </div>
+    </body>
+</html>

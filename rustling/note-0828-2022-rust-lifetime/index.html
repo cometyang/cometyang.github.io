@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        
+
+        <title></title>
+
+        
+            <link rel="stylesheet" href="https://cometyang.github.io/theme.css">
+        
+        
+    </head>
+    <body>
+        <div class="content">
+        
+        
+            <header>
+                <div class="header-left">
+                    <a href="https:&#x2F;&#x2F;cometyang.github.io" class="logo"></a>
+                </div>
+                <div class="header-right">
+                    <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+                      <ul>
+                        
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/machinelearning/">
+                                    <span itemprop="name">Machine Learning</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/notes/">
+                                    <span itemprop="name">Notes</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/rustling/">
+                                    <span itemprop="name">Rustling</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/about/">
+                                    <span itemprop="name">About</span>
+                                </a>
+                            </li>
+                        
+                        
+                        
+                      </ul>
+                    </nav>
+                </div>
+            </header>
+        
+        
+        <main>
+            
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <div itemprop="headline">
+        <h1>Rustling Lifetime</h1>
+        <div class="border"></div>
+        <time datetime="2022-08-27" class="date" itemprop="datePublished">
+            27 Aug 2022
+        </time>
+    </div>
+    <div itemprop="articleBody">
+        <p>Lifetime <a href="https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html">syntax</a></p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">longest</span><span>&lt;</span><span style="color:#b48ead;">&#39;a</span><span>&gt;(</span><span style="color:#bf616a;">x</span><span>: &amp;</span><span style="color:#b48ead;">&#39;a str</span><span>, </span><span style="color:#bf616a;">y</span><span>: &amp;</span><span style="color:#b48ead;">&#39;a str</span><span>) -&gt; &amp;</span><span style="color:#b48ead;">&#39;a str </span><span>{
+</span><span>    </span><span style="color:#b48ead;">if</span><span> x.</span><span style="color:#96b5b4;">len</span><span>() &gt; y.</span><span style="color:#96b5b4;">len</span><span>() {
+</span><span>        x
+</span><span>    } </span><span style="color:#b48ead;">else </span><span>{
+</span><span>        y
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> string1 = String::from(&quot;</span><span style="color:#a3be8c;">abcd</span><span>&quot;);
+</span><span>    </span><span style="color:#b48ead;">let</span><span> string2 = &quot;</span><span style="color:#a3be8c;">xyz</span><span>&quot;;
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">let</span><span> result = </span><span style="color:#96b5b4;">longest</span><span>(string1.</span><span style="color:#96b5b4;">as_str</span><span>(), string2);
+</span><span>    println!(&quot;</span><span style="color:#a3be8c;">The longest string is </span><span style="color:#d08770;">{}</span><span>&quot;, result);
+</span><span>}
+</span></code></pre>
+<p>Solution 1</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">longest</span><span>&lt;</span><span style="color:#b48ead;">&#39;a</span><span>&gt;(</span><span style="color:#bf616a;">x</span><span>: &amp;</span><span style="color:#b48ead;">&#39;a str</span><span>, </span><span style="color:#bf616a;">y</span><span>: &amp;</span><span style="color:#b48ead;">&#39;a str</span><span>) -&gt; &amp;</span><span style="color:#b48ead;">&#39;a str </span><span>{
+</span><span>    </span><span style="color:#b48ead;">if</span><span> x.</span><span style="color:#96b5b4;">len</span><span>() &gt; y.</span><span style="color:#96b5b4;">len</span><span>() {
+</span><span>        x
+</span><span>    } </span><span style="color:#b48ead;">else </span><span>{
+</span><span>        y
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> string1 = String::from(&quot;</span><span style="color:#a3be8c;">long string is long</span><span>&quot;);
+</span><span>    </span><span style="color:#b48ead;">let</span><span> result;
+</span><span>    </span><span style="color:#65737e;">//{
+</span><span>        </span><span style="color:#b48ead;">let</span><span> string2 = String::from(&quot;</span><span style="color:#a3be8c;">xyz</span><span>&quot;);
+</span><span>        result = </span><span style="color:#96b5b4;">longest</span><span>(string1.</span><span style="color:#96b5b4;">as_str</span><span>(), string2.</span><span style="color:#96b5b4;">as_str</span><span>());
+</span><span>    </span><span style="color:#65737e;">//}
+</span><span>    println!(&quot;</span><span style="color:#a3be8c;">The longest string is </span><span style="color:#d08770;">{}</span><span>&quot;, result);
+</span><span>}
+</span></code></pre>
+<p>Solution 2 </p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">longest</span><span>&lt;</span><span style="color:#b48ead;">&#39;a</span><span>&gt;(</span><span style="color:#bf616a;">x</span><span>: &amp;</span><span style="color:#b48ead;">&#39;a str</span><span>, </span><span style="color:#bf616a;">y</span><span>: &amp;</span><span style="color:#b48ead;">&#39;a str</span><span>) -&gt; &amp;</span><span style="color:#b48ead;">&#39;a str </span><span>{
+</span><span>    </span><span style="color:#b48ead;">if</span><span> x.</span><span style="color:#96b5b4;">len</span><span>() &gt; y.</span><span style="color:#96b5b4;">len</span><span>() {
+</span><span>        x
+</span><span>    } </span><span style="color:#b48ead;">else </span><span>{
+</span><span>        y
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> string1 = String::from(&quot;</span><span style="color:#a3be8c;">long string is long</span><span>&quot;);
+</span><span>    </span><span style="color:#b48ead;">let</span><span> result;
+</span><span>    {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> string2 = String::from(&quot;</span><span style="color:#a3be8c;">xyz</span><span>&quot;);
+</span><span>        result = </span><span style="color:#96b5b4;">longest</span><span>(string1.</span><span style="color:#96b5b4;">as_str</span><span>(), string2.</span><span style="color:#96b5b4;">as_str</span><span>());
+</span><span>        println!(&quot;</span><span style="color:#a3be8c;">The longest string is </span><span style="color:#d08770;">{}</span><span>&quot;, result);
+</span><span>    }
+</span><span>    
+</span><span>}
+</span><span>
+</span></code></pre>
+<p>Lifetime in Struct</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">struct </span><span>Book&lt;</span><span style="color:#b48ead;">&#39;a</span><span>&gt; {
+</span><span>    </span><span style="color:#bf616a;">author</span><span>: &amp;</span><span style="color:#b48ead;">&#39;a str</span><span>,
+</span><span>    </span><span style="color:#bf616a;">title</span><span>: &amp;</span><span style="color:#b48ead;">&#39;a str</span><span>,
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> name = String::from(&quot;</span><span style="color:#a3be8c;">Jill Smith</span><span>&quot;);
+</span><span>    </span><span style="color:#b48ead;">let</span><span> title = String::from(&quot;</span><span style="color:#a3be8c;">Fish Flying</span><span>&quot;);
+</span><span>    </span><span style="color:#b48ead;">let</span><span> book = Book { author: &amp;name, title: &amp;title };
+</span><span>
+</span><span>    println!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> by </span><span style="color:#d08770;">{}</span><span>&quot;, book.title, book.author);
+</span><span>}
+</span></code></pre>
+
+    </div>
+</article>
+
+        </main>
+        
+        <footer>
+            
+            <div class="border"></div>
+            <div class="footer">
+                <small class="footer-left">
+                    Copyright &copy; Yang Yang
+                </small>
+                <small class="footer-right">
+                    Powered by <a href="https://www.getzola.org">Zola</a> | Theme <a href="https://github.com/barlog-m/oceanic-zen">Oceanic Zen</a>
+                </small>
+            </div>
+        
+        </footer>
+    
+        </div>
+    </body>
+</html>

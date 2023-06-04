@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        
+
+        <title></title>
+
+        
+            <link rel="stylesheet" href="https://cometyang.github.io/theme.css">
+        
+        
+    </head>
+    <body>
+        <div class="content">
+        
+        
+            <header>
+                <div class="header-left">
+                    <a href="https:&#x2F;&#x2F;cometyang.github.io" class="logo"></a>
+                </div>
+                <div class="header-right">
+                    <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+                      <ul>
+                        
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/machinelearning/">
+                                    <span itemprop="name">Machine Learning</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/notes/">
+                                    <span itemprop="name">Notes</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/rustling/">
+                                    <span itemprop="name">Rustling</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/about/">
+                                    <span itemprop="name">About</span>
+                                </a>
+                            </li>
+                        
+                        
+                        
+                      </ul>
+                    </nav>
+                </div>
+            </header>
+        
+        
+        <main>
+            
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <div itemprop="headline">
+        <h1>Rustling Error Handling</h1>
+        <div class="border"></div>
+        <time datetime="2022-08-27" class="date" itemprop="datePublished">
+            27 Aug 2022
+        </time>
+    </div>
+    <div itemprop="articleBody">
+        <p>Error Handling</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span> </span><span style="color:#b48ead;">use </span><span>std::num::ParseIntError;
+</span><span>
+</span><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">total_cost</span><span>(</span><span style="color:#bf616a;">item_quantity</span><span>: &amp;</span><span style="color:#b48ead;">str</span><span>) -&gt; Result&lt;</span><span style="color:#b48ead;">i32</span><span>, ParseIntError&gt; {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> processing_fee = </span><span style="color:#d08770;">1</span><span>;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> cost_per_item = </span><span style="color:#d08770;">5</span><span>;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> qty = item_quantity.parse::&lt;</span><span style="color:#b48ead;">i32</span><span>&gt;();
+</span><span>    </span><span style="color:#b48ead;">match</span><span> qty {
+</span><span>        Ok(qty) =&gt; Ok(qty * cost_per_item + processing_fee),
+</span><span>        ParseIntError =&gt; ParseIntError
+</span><span>    }
+</span><span>    
+</span><span>}
+</span><span>
+</span><span>#[</span><span style="color:#bf616a;">cfg</span><span>(test)]
+</span><span style="color:#b48ead;">mod </span><span>tests {
+</span><span>    </span><span style="color:#b48ead;">use super</span><span>::*;
+</span><span>
+</span><span>    #[</span><span style="color:#bf616a;">test</span><span>]
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">item_quantity_is_a_valid_number</span><span>() {
+</span><span>        assert_eq!(</span><span style="color:#96b5b4;">total_cost</span><span>(&quot;</span><span style="color:#a3be8c;">34</span><span>&quot;), Ok(</span><span style="color:#d08770;">171</span><span>));
+</span><span>    }
+</span><span>
+</span><span>    #[</span><span style="color:#bf616a;">test</span><span>]
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">item_quantity_is_an_invalid_number</span><span>() {
+</span><span>        assert_eq!(
+</span><span>            </span><span style="color:#96b5b4;">total_cost</span><span>(&quot;</span><span style="color:#a3be8c;">beep boop</span><span>&quot;).</span><span style="color:#96b5b4;">unwrap_err</span><span>().</span><span style="color:#96b5b4;">to_string</span><span>(),
+</span><span>            &quot;</span><span style="color:#a3be8c;">invalid digit found in string</span><span>&quot;
+</span><span>        );
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>To fix the error: &quot;^ cannot use the <code>?</code> operator in a function that returns <code>()</code>&quot;</p>
+<p>Optin 1</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">use </span><span>std::num::ParseIntError;
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> tokens = </span><span style="color:#d08770;">100</span><span>;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> pretend_user_input = &quot;</span><span style="color:#a3be8c;">8</span><span>&quot;;
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">let</span><span> cost = </span><span style="color:#96b5b4;">total_cost</span><span>(pretend_user_input).</span><span style="color:#96b5b4;">unwrap</span><span>();
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">if</span><span> cost &gt; tokens {
+</span><span>        println!(&quot;</span><span style="color:#a3be8c;">You can&#39;t afford that many!</span><span>&quot;);
+</span><span>    } </span><span style="color:#b48ead;">else </span><span>{
+</span><span>        tokens -= cost;
+</span><span>        println!(&quot;</span><span style="color:#a3be8c;">You now have </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> tokens.</span><span>&quot;, tokens);
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">total_cost</span><span>(</span><span style="color:#bf616a;">item_quantity</span><span>: &amp;</span><span style="color:#b48ead;">str</span><span>) -&gt; Result&lt;</span><span style="color:#b48ead;">i32</span><span>, ParseIntError&gt; {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> processing_fee = </span><span style="color:#d08770;">1</span><span>;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> cost_per_item = </span><span style="color:#d08770;">5</span><span>;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> qty = item_quantity.parse::&lt;</span><span style="color:#b48ead;">i32</span><span>&gt;()?;
+</span><span>
+</span><span>    Ok(qty * cost_per_item + processing_fee)
+</span><span>}
+</span><span>
+</span></code></pre>
+<p>Option 2</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span>
+</span><span style="color:#b48ead;">use </span><span>std::num::ParseIntError;
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() -&gt; Result&lt;(),ParseIntError&gt; {
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> tokens = </span><span style="color:#d08770;">100</span><span>;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> pretend_user_input = &quot;</span><span style="color:#a3be8c;">8</span><span>&quot;;
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">let</span><span> cost = </span><span style="color:#96b5b4;">total_cost</span><span>(pretend_user_input)?;
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">if</span><span> cost &gt; tokens {
+</span><span>        println!(&quot;</span><span style="color:#a3be8c;">You can&#39;t afford that many!</span><span>&quot;);
+</span><span>    } </span><span style="color:#b48ead;">else </span><span>{
+</span><span>        tokens -= cost;
+</span><span>        println!(&quot;</span><span style="color:#a3be8c;">You now have </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> tokens.</span><span>&quot;, tokens);
+</span><span>    }
+</span><span>
+</span><span>    Ok(())
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">total_cost</span><span>(</span><span style="color:#bf616a;">item_quantity</span><span>: &amp;</span><span style="color:#b48ead;">str</span><span>) -&gt; Result&lt;</span><span style="color:#b48ead;">i32</span><span>, ParseIntError&gt; {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> processing_fee = </span><span style="color:#d08770;">1</span><span>;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> cost_per_item = </span><span style="color:#d08770;">5</span><span>;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> qty = item_quantity.parse::&lt;</span><span style="color:#b48ead;">i32</span><span>&gt;()?;
+</span><span>
+</span><span>    Ok(qty * cost_per_item + processing_fee)
+</span><span>}
+</span><span>
+</span><span>
+</span></code></pre>
+<p>Error 6: Customized Error</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span>
+</span><span style="color:#b48ead;">use </span><span>std::num::ParseIntError;
+</span><span>
+</span><span style="color:#65737e;">// This is a custom error type that we will be using in `parse_pos_nonzero()`.
+</span><span>#[</span><span style="color:#bf616a;">derive</span><span>(PartialEq, Debug)]
+</span><span style="color:#b48ead;">enum </span><span>ParsePosNonzeroError {
+</span><span>    Creation(CreationError),
+</span><span>    ParseInt(ParseIntError)
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">impl </span><span>ParsePosNonzeroError {
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">from_creation</span><span>(</span><span style="color:#bf616a;">err</span><span>: CreationError) -&gt; ParsePosNonzeroError {
+</span><span>        ParsePosNonzeroError::Creation(err)
+</span><span>    }
+</span><span>    </span><span style="color:#65737e;">// TODO: add another error conversion function here.
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">from_parseint</span><span>(</span><span style="color:#bf616a;">err</span><span>: ParseIntError) -&gt; ParsePosNonzeroError {
+</span><span>        ParsePosNonzeroError::ParseInt(err)
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">parse_pos_nonzero</span><span>(</span><span style="color:#bf616a;">s</span><span>: &amp;</span><span style="color:#b48ead;">str</span><span>)
+</span><span>    -&gt; Result&lt;PositiveNonzeroInteger, ParsePosNonzeroError&gt;
+</span><span>{
+</span><span>    </span><span style="color:#65737e;">// TODO: change this to return an appropriate error instead of panicking
+</span><span>    </span><span style="color:#65737e;">// when `parse()` returns an error.
+</span><span>    </span><span style="color:#b48ead;">let</span><span> x:</span><span style="color:#b48ead;">i64 </span><span>= s.</span><span style="color:#96b5b4;">parse</span><span>().</span><span style="color:#96b5b4;">map_err</span><span>(ParsePosNonzeroError::from_parseint)?;
+</span><span>
+</span><span>    PositiveNonzeroInteger::new(x)
+</span><span>        .</span><span style="color:#96b5b4;">map_err</span><span>(ParsePosNonzeroError::from_creation)
+</span><span>    
+</span><span>}
+</span><span>
+</span><span style="color:#65737e;">// Don&#39;t change anything below this line.
+</span><span>
+</span><span>#[</span><span style="color:#bf616a;">derive</span><span>(PartialEq, Debug)]
+</span><span style="color:#b48ead;">struct </span><span>PositiveNonzeroInteger(</span><span style="color:#b48ead;">u64</span><span>);
+</span><span>
+</span><span>#[</span><span style="color:#bf616a;">derive</span><span>(PartialEq, Debug)]
+</span><span style="color:#b48ead;">enum </span><span>CreationError {
+</span><span>    Negative,
+</span><span>    Zero,
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">impl </span><span>PositiveNonzeroInteger {
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">new</span><span>(</span><span style="color:#bf616a;">value</span><span>: </span><span style="color:#b48ead;">i64</span><span>) -&gt; Result&lt;PositiveNonzeroInteger, CreationError&gt; {
+</span><span>        </span><span style="color:#b48ead;">match</span><span> value {
+</span><span>            x </span><span style="color:#b48ead;">if</span><span> x &lt; </span><span style="color:#d08770;">0 </span><span>=&gt; Err(CreationError::Negative),
+</span><span>            x </span><span style="color:#b48ead;">if</span><span> x == </span><span style="color:#d08770;">0 </span><span>=&gt; Err(CreationError::Zero),
+</span><span>            x =&gt; Ok(PositiveNonzeroInteger(x as </span><span style="color:#b48ead;">u64</span><span>))
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span>#[</span><span style="color:#bf616a;">cfg</span><span>(test)]
+</span><span style="color:#b48ead;">mod </span><span>test {
+</span><span>    </span><span style="color:#b48ead;">use super</span><span>::*;
+</span><span>
+</span><span>    #[</span><span style="color:#bf616a;">test</span><span>]
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">test_parse_error</span><span>() {
+</span><span>        </span><span style="color:#65737e;">// We can&#39;t construct a ParseIntError, so we have to pattern match.
+</span><span>        assert!(matches!(
+</span><span>            </span><span style="color:#96b5b4;">parse_pos_nonzero</span><span>(&quot;</span><span style="color:#a3be8c;">not a number</span><span>&quot;),
+</span><span>            Err(ParsePosNonzeroError::ParseInt(_))
+</span><span>        ));
+</span><span>    }
+</span><span>
+</span><span>    #[</span><span style="color:#bf616a;">test</span><span>]
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">test_negative</span><span>() {
+</span><span>        assert_eq!(
+</span><span>            </span><span style="color:#96b5b4;">parse_pos_nonzero</span><span>(&quot;</span><span style="color:#a3be8c;">-555</span><span>&quot;),
+</span><span>            Err(ParsePosNonzeroError::Creation(CreationError::Negative))
+</span><span>        );
+</span><span>    }
+</span><span>
+</span><span>    #[</span><span style="color:#bf616a;">test</span><span>]
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">test_zero</span><span>() {
+</span><span>        assert_eq!(
+</span><span>            </span><span style="color:#96b5b4;">parse_pos_nonzero</span><span>(&quot;</span><span style="color:#a3be8c;">0</span><span>&quot;),
+</span><span>            Err(ParsePosNonzeroError::Creation(CreationError::Zero))
+</span><span>        );
+</span><span>    }
+</span><span>
+</span><span>    #[</span><span style="color:#bf616a;">test</span><span>]
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">test_positive</span><span>() {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> x = PositiveNonzeroInteger::new(</span><span style="color:#d08770;">42</span><span>);
+</span><span>        assert!(x.</span><span style="color:#96b5b4;">is_ok</span><span>());
+</span><span>        assert_eq!(</span><span style="color:#96b5b4;">parse_pos_nonzero</span><span>(&quot;</span><span style="color:#a3be8c;">42</span><span>&quot;), Ok(x.</span><span style="color:#96b5b4;">unwrap</span><span>()));
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span>
+</span></code></pre>
+
+    </div>
+</article>
+
+        </main>
+        
+        <footer>
+            
+            <div class="border"></div>
+            <div class="footer">
+                <small class="footer-left">
+                    Copyright &copy; Yang Yang
+                </small>
+                <small class="footer-right">
+                    Powered by <a href="https://www.getzola.org">Zola</a> | Theme <a href="https://github.com/barlog-m/oceanic-zen">Oceanic Zen</a>
+                </small>
+            </div>
+        
+        </footer>
+    
+        </div>
+    </body>
+</html>

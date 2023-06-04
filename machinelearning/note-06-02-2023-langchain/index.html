@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        
+
+        <title></title>
+
+        
+            <link rel="stylesheet" href="https://cometyang.github.io/theme.css">
+        
+        
+    </head>
+    <body>
+        <div class="content">
+        
+        
+            <header>
+                <div class="header-left">
+                    <a href="https:&#x2F;&#x2F;cometyang.github.io" class="logo"></a>
+                </div>
+                <div class="header-right">
+                    <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+                      <ul>
+                        
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/machinelearning/">
+                                    <span itemprop="name">Machine Learning</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/notes/">
+                                    <span itemprop="name">Notes</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/rustling/">
+                                    <span itemprop="name">Rustling</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/about/">
+                                    <span itemprop="name">About</span>
+                                </a>
+                            </li>
+                        
+                        
+                        
+                      </ul>
+                    </nav>
+                </div>
+            </header>
+        
+        
+        <main>
+            
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <div itemprop="headline">
+        <h1>Notes on DeepLearning.AI&#x27;s course</h1>
+        <div class="border"></div>
+        <time datetime="2023-06-02" class="date" itemprop="datePublished">
+            02 Jun 2023
+        </time>
+    </div>
+    <div itemprop="articleBody">
+        <ul>
+<li>Lang Chain</li>
+</ul>
+<h2 id="components">Components</h2>
+<h3 id="models">Models</h3>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>1. LLMs
+</span><span>2. Chat Models
+</span><span>3. Text Embedding Models
+</span></code></pre>
+<h3 id="prompts">Prompts</h3>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>1. Prompt Templates,
+</span><span>2. Output Parsers: (Retry/Fixing Logic) 
+</span><span>   langchain libaray function parse the LLM output assuming that it will use certain keywords.`
+</span><span>3. Memory: LLM are stateless and transaction is independent, Memory here refers to the convesation history as &#39;context&#39;
+</span><span>   1. Unlimited: ConversationBufferMemory, allows for storing of messages and then extracts the messages in a variable
+</span><span>   2. Windowed, keep a few rounds ($k$ rounds) conversations as a list of the interactions of the conversation over time: ConversationBufferWindowMemory
+</span><span>   3. Token Length as parameter, keeps a buffer of recent interactions in memory, ans uses token length rahter than number of interactions to determine when to flush interactions :  ConversationTokenBufferMemory
+</span><span>   4. LLM summarize the conversation over time as context: ConversationSummaryMemory
+</span><span>   5. Vector Data Memory: Store text (from conversation or elsewhere) in a vector database and retrieves the most releveant blocks of text
+</span><span>   6. Entity Memories: Using an LLM, it remembers details about specific entities
+</span><span>    You can also use multiple memories at one timee. E.g. Conversation memory + Entity memory to recall individuals
+</span><span>    Store the conversation in a conversational database (such as key-value store or SQL)
+</span><span>4. Example Selectors
+</span></code></pre>
+<h3 id="indexes">Indexes</h3>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>create small chunks and index using embeddings, and retrival based on vector similarity
+</span><span>1. Document Loaders
+</span><span>2. Text Splitters
+</span><span>3. Vector Stores
+</span><span>   1. Embedding captures semantic meaning
+</span><span>   2. Text with similar content will have similar vectors
+</span><span>4. Retrievers
+</span></code></pre>
+<h3 id="chains">Chains</h3>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>1. Prompt+LLM+Ouput parsing
+</span><span>2. As building blocks for longer chains
+</span><span>   1. Sequential Chain
+</span><span>   2. Routher Chain
+</span><span>3. Application Specific chains
+</span><span>4. Question and Answering: 
+</span><span>   * Stuffing is the simplest method, you simply stuff all data into the prompt as context to pass  to the LLM, Drawback is the LLMs have a context length and for large documents this will not work as it will result in a prompt larger than the context length.
+</span><span>   * Map_reduce, checks-&gt;each map to 1 llm -&gt; join into one LLM -&gt; final answer
+</span><span>   * Refine, Iterative incrase
+</span><span>   * Map_rerank, select highest call
+</span><span>5. Evaluation
+</span><span>   1. Manual
+</span><span>   2. LLM assited
+</span><span>   3. Turn on langchain debug to True
+</span></code></pre>
+<h3 id="agents">Agents</h3>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>1. Agent Types
+</span><span>   1. Algorithms for getting LLMs to use tools
+</span><span>2. Agent Toolkits:
+</span><span>   1. Agents armed with specific tools for a specific application
+</span></code></pre>
+
+    </div>
+</article>
+
+        </main>
+        
+        <footer>
+            
+            <div class="border"></div>
+            <div class="footer">
+                <small class="footer-left">
+                    Copyright &copy; Yang Yang
+                </small>
+                <small class="footer-right">
+                    Powered by <a href="https://www.getzola.org">Zola</a> | Theme <a href="https://github.com/barlog-m/oceanic-zen">Oceanic Zen</a>
+                </small>
+            </div>
+        
+        </footer>
+    
+        </div>
+    </body>
+</html>

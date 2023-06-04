@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        
+
+        <title></title>
+
+        
+            <link rel="stylesheet" href="https://cometyang.github.io/theme.css">
+        
+        
+    </head>
+    <body>
+        <div class="content">
+        
+        
+            <header>
+                <div class="header-left">
+                    <a href="https:&#x2F;&#x2F;cometyang.github.io" class="logo"></a>
+                </div>
+                <div class="header-right">
+                    <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+                      <ul>
+                        
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/machinelearning/">
+                                    <span itemprop="name">Machine Learning</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/notes/">
+                                    <span itemprop="name">Notes</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/rustling/">
+                                    <span itemprop="name">Rustling</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://cometyang.github.io/about/">
+                                    <span itemprop="name">About</span>
+                                </a>
+                            </li>
+                        
+                        
+                        
+                      </ul>
+                    </nav>
+                </div>
+            </header>
+        
+        
+        <main>
+            
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <div itemprop="headline">
+        <h1>Rustling String &amp; Hashmap</h1>
+        <div class="border"></div>
+        <time datetime="2022-08-26" class="date" itemprop="datePublished">
+            26 Aug 2022
+        </time>
+    </div>
+    <div itemprop="articleBody">
+        <pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">string_slice</span><span>(</span><span style="color:#bf616a;">arg</span><span>: &amp;</span><span style="color:#b48ead;">str</span><span>) {
+</span><span>    println!(&quot;</span><span style="color:#d08770;">{}</span><span>&quot;, arg);
+</span><span>}
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">string</span><span>(</span><span style="color:#bf616a;">arg</span><span>: String) {
+</span><span>    println!(&quot;</span><span style="color:#d08770;">{}</span><span>&quot;, arg);
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    </span><span style="color:#96b5b4;">string_slice</span><span>(&quot;</span><span style="color:#a3be8c;">blue</span><span>&quot;);
+</span><span>    </span><span style="color:#96b5b4;">string</span><span>(&quot;</span><span style="color:#a3be8c;">red</span><span>&quot;.</span><span style="color:#96b5b4;">to_string</span><span>());
+</span><span>    </span><span style="color:#96b5b4;">string</span><span>(String::from(&quot;</span><span style="color:#a3be8c;">hi</span><span>&quot;));
+</span><span>    </span><span style="color:#96b5b4;">string</span><span>(&quot;</span><span style="color:#a3be8c;">rust is fun!</span><span>&quot;.</span><span style="color:#96b5b4;">to_owned</span><span>());
+</span><span>    </span><span style="color:#96b5b4;">string</span><span>(&quot;</span><span style="color:#a3be8c;">nice weather</span><span>&quot;.</span><span style="color:#96b5b4;">into</span><span>());
+</span><span>    </span><span style="color:#96b5b4;">string</span><span>(format!(&quot;</span><span style="color:#a3be8c;">Interpolation </span><span style="color:#d08770;">{}</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">Station</span><span>&quot;));
+</span><span>    </span><span style="color:#96b5b4;">string_slice</span><span>(&amp;String::from(&quot;</span><span style="color:#a3be8c;">abc</span><span>&quot;)[</span><span style="color:#d08770;">0</span><span>..</span><span style="color:#d08770;">1</span><span>]);
+</span><span>    </span><span style="color:#96b5b4;">string_slice</span><span>(&quot;</span><span style="color:#a3be8c;">  hello there </span><span>&quot;.</span><span style="color:#96b5b4;">trim</span><span>());
+</span><span>    </span><span style="color:#96b5b4;">string</span><span>(&quot;</span><span style="color:#a3be8c;">Happy Monday!</span><span>&quot;.</span><span style="color:#96b5b4;">to_string</span><span>().</span><span style="color:#96b5b4;">replace</span><span>(&quot;</span><span style="color:#a3be8c;">Mon</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">Tues</span><span>&quot;));
+</span><span>    </span><span style="color:#96b5b4;">string</span><span>(&quot;</span><span style="color:#a3be8c;">mY sHiFt KeY iS sTiCkY</span><span>&quot;.</span><span style="color:#96b5b4;">to_lowercase</span><span>());
+</span><span>}
+</span><span>
+</span></code></pre>
+<p>Rust Hashmap 1 Exercise</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span>    </span><span style="color:#b48ead;">use </span><span>std::collections::HashMap;
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> scores = HashMap::new();
+</span><span>    scores.</span><span style="color:#96b5b4;">insert</span><span>(String::from(&quot;</span><span style="color:#a3be8c;">Blue</span><span>&quot;), </span><span style="color:#d08770;">10</span><span>);
+</span><span>
+</span><span>    scores.</span><span style="color:#96b5b4;">entry</span><span>(String::from(&quot;</span><span style="color:#a3be8c;">Yellow</span><span>&quot;)).</span><span style="color:#96b5b4;">or_insert</span><span>(</span><span style="color:#d08770;">50</span><span>);
+</span><span>    scores.</span><span style="color:#96b5b4;">entry</span><span>(String::from(&quot;</span><span style="color:#a3be8c;">Blue</span><span>&quot;)).</span><span style="color:#96b5b4;">or_insert</span><span>(</span><span style="color:#d08770;">50</span><span>);
+</span><span>
+</span><span>    println!(&quot;</span><span style="color:#d08770;">{:?}</span><span>&quot;, scores);
+</span></code></pre>
+<p>Rust Hashmap 3 Exercise</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">use </span><span>std::collections::HashMap;
+</span><span>
+</span><span style="color:#65737e;">// A structure to store team name and its goal details.
+</span><span style="color:#b48ead;">struct </span><span>Team {
+</span><span>    </span><span style="color:#bf616a;">name</span><span>: String,
+</span><span>    </span><span style="color:#bf616a;">goals_scored</span><span>: </span><span style="color:#b48ead;">u8</span><span>,
+</span><span>    </span><span style="color:#bf616a;">goals_conceded</span><span>: </span><span style="color:#b48ead;">u8</span><span>,
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">build_scores_table</span><span>(</span><span style="color:#bf616a;">results</span><span>: String) -&gt; HashMap&lt;String, Team&gt; {
+</span><span>    </span><span style="color:#65737e;">// The name of the team is the key and its associated struct is the value.
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> scores: HashMap&lt;String, Team&gt; = HashMap::new();
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">for</span><span> r in results.</span><span style="color:#96b5b4;">lines</span><span>() {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> v: Vec&lt;&amp;</span><span style="color:#b48ead;">str</span><span>&gt; = r.</span><span style="color:#96b5b4;">split</span><span>(&#39;</span><span style="color:#a3be8c;">,</span><span>&#39;).</span><span style="color:#96b5b4;">collect</span><span>();
+</span><span>        </span><span style="color:#b48ead;">let</span><span> team_1_name = v[</span><span style="color:#d08770;">0</span><span>].</span><span style="color:#96b5b4;">to_string</span><span>();
+</span><span>        </span><span style="color:#b48ead;">let</span><span> team_1_score: </span><span style="color:#b48ead;">u8 </span><span>= v[</span><span style="color:#d08770;">2</span><span>].</span><span style="color:#96b5b4;">parse</span><span>().</span><span style="color:#96b5b4;">unwrap</span><span>();
+</span><span>        </span><span style="color:#b48ead;">let</span><span> team_2_name = v[</span><span style="color:#d08770;">1</span><span>].</span><span style="color:#96b5b4;">to_string</span><span>();
+</span><span>        </span><span style="color:#b48ead;">let</span><span> team_2_score: </span><span style="color:#b48ead;">u8 </span><span>= v[</span><span style="color:#d08770;">3</span><span>].</span><span style="color:#96b5b4;">parse</span><span>().</span><span style="color:#96b5b4;">unwrap</span><span>();
+</span><span>
+</span><span>
+</span><span>        scores.</span><span style="color:#96b5b4;">entry</span><span>(team_1_name).</span><span style="color:#96b5b4;">and_modify</span><span>(|</span><span style="color:#bf616a;">e</span><span>| {
+</span><span>            e.goals_scored += team_1_score;
+</span><span>            e.goals_conceded += team_2_score;
+</span><span>        })
+</span><span>        .</span><span style="color:#96b5b4;">or_insert_with_key</span><span>(|</span><span style="color:#bf616a;">name</span><span>| Team {
+</span><span>            name: name.</span><span style="color:#96b5b4;">to_string</span><span>(),
+</span><span>            goals_scored: team_1_score,
+</span><span>            goals_conceded: team_2_score,
+</span><span>        });
+</span><span>
+</span><span>        scores.</span><span style="color:#96b5b4;">entry</span><span>(team_2_name).</span><span style="color:#96b5b4;">and_modify</span><span>(|</span><span style="color:#bf616a;">e</span><span>| {
+</span><span>            e.goals_scored += team_2_score;
+</span><span>            e.goals_conceded += team_1_score;
+</span><span>        })
+</span><span>        .</span><span style="color:#96b5b4;">or_insert_with_key</span><span>(|</span><span style="color:#bf616a;">name</span><span>| Team {
+</span><span>            name: name.</span><span style="color:#96b5b4;">to_string</span><span>(),
+</span><span>            goals_scored: team_2_score,
+</span><span>            goals_conceded: team_1_score,
+</span><span>        });
+</span><span>
+</span><span>      
+</span><span>        </span><span style="color:#65737e;">// TODO: Populate the scores table with details extracted from the
+</span><span>        </span><span style="color:#65737e;">// current line. Keep in mind that goals scored by team_1
+</span><span>        </span><span style="color:#65737e;">// will be number of goals conceded from team_2, and similarly
+</span><span>        </span><span style="color:#65737e;">// goals scored by team_2 will be the number of goals conceded by
+</span><span>        </span><span style="color:#65737e;">// team_1.
+</span><span>    }
+</span><span>    scores
+</span><span>}
+</span><span>
+</span><span>#[</span><span style="color:#bf616a;">cfg</span><span>(test)]
+</span><span style="color:#b48ead;">mod </span><span>tests {
+</span><span>    </span><span style="color:#b48ead;">use super</span><span>::*;
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">get_results</span><span>() -&gt; String {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> results = &quot;&quot;.</span><span style="color:#96b5b4;">to_string</span><span>()
+</span><span>            + &quot;</span><span style="color:#a3be8c;">England,France,4,2</span><span style="color:#96b5b4;">\n</span><span>&quot;
+</span><span>            + &quot;</span><span style="color:#a3be8c;">France,Italy,3,1</span><span style="color:#96b5b4;">\n</span><span>&quot;
+</span><span>            + &quot;</span><span style="color:#a3be8c;">Poland,Spain,2,0</span><span style="color:#96b5b4;">\n</span><span>&quot;
+</span><span>            + &quot;</span><span style="color:#a3be8c;">Germany,England,2,1</span><span style="color:#96b5b4;">\n</span><span>&quot;;
+</span><span>        results
+</span><span>    }
+</span><span>
+</span><span>    #[</span><span style="color:#bf616a;">test</span><span>]
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">build_scores</span><span>() {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> scores = </span><span style="color:#96b5b4;">build_scores_table</span><span>(</span><span style="color:#96b5b4;">get_results</span><span>());
+</span><span>
+</span><span>        </span><span style="color:#b48ead;">let mut</span><span> keys: Vec&lt;&amp;String&gt; = scores.</span><span style="color:#96b5b4;">keys</span><span>().</span><span style="color:#96b5b4;">collect</span><span>();
+</span><span>        keys.</span><span style="color:#96b5b4;">sort</span><span>();
+</span><span>        assert_eq!(
+</span><span>            keys,
+</span><span>            vec![&quot;</span><span style="color:#a3be8c;">England</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">France</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">Germany</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">Italy</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">Poland</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">Spain</span><span>&quot;]
+</span><span>        );
+</span><span>    }
+</span><span>
+</span><span>    #[</span><span style="color:#bf616a;">test</span><span>]
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">validate_team_score_1</span><span>() {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> scores = </span><span style="color:#96b5b4;">build_scores_table</span><span>(</span><span style="color:#96b5b4;">get_results</span><span>());
+</span><span>        </span><span style="color:#b48ead;">let</span><span> team = scores.</span><span style="color:#96b5b4;">get</span><span>(&quot;</span><span style="color:#a3be8c;">England</span><span>&quot;).</span><span style="color:#96b5b4;">unwrap</span><span>();
+</span><span>        assert_eq!(team.goals_scored, </span><span style="color:#d08770;">5</span><span>);
+</span><span>        assert_eq!(team.goals_conceded, </span><span style="color:#d08770;">4</span><span>);
+</span><span>    }
+</span><span>
+</span><span>    #[</span><span style="color:#bf616a;">test</span><span>]
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">validate_team_score_2</span><span>() {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> scores = </span><span style="color:#96b5b4;">build_scores_table</span><span>(</span><span style="color:#96b5b4;">get_results</span><span>());
+</span><span>        </span><span style="color:#b48ead;">let</span><span> team = scores.</span><span style="color:#96b5b4;">get</span><span>(&quot;</span><span style="color:#a3be8c;">Spain</span><span>&quot;).</span><span style="color:#96b5b4;">unwrap</span><span>();
+</span><span>        assert_eq!(team.goals_scored, </span><span style="color:#d08770;">0</span><span>);
+</span><span>        assert_eq!(team.goals_conceded, </span><span style="color:#d08770;">2</span><span>);
+</span><span>    }
+</span><span>}
+</span><span>
+</span></code></pre>
+
+    </div>
+</article>
+
+        </main>
+        
+        <footer>
+            
+            <div class="border"></div>
+            <div class="footer">
+                <small class="footer-left">
+                    Copyright &copy; Yang Yang
+                </small>
+                <small class="footer-right">
+                    Powered by <a href="https://www.getzola.org">Zola</a> | Theme <a href="https://github.com/barlog-m/oceanic-zen">Oceanic Zen</a>
+                </small>
+            </div>
+        
+        </footer>
+    
+        </div>
+    </body>
+</html>
